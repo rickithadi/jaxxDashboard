@@ -12,6 +12,7 @@ import { authContext } from "./context";
 import { ProductPage } from "./components/ProductPage";
 import { LoginPage } from "./components/LoginPage";
 import { AuthedHeader } from "./components/AuthedHeader";
+import { AddProductPage } from "./components/AddProductPage";
 
 export const App = () => {
   const withAuthedHeader = (component: JSX.Element) => (
@@ -24,6 +25,12 @@ export const App = () => {
     <Router>
       <Switch>
         {/* Private Routes */}
+        <PrivateRoute
+          exact
+          path="/add"
+          component={() => withAuthedHeader(<AddProductPage />)}
+        />
+
         <PrivateRoute
           exact
           path="/item/:id"

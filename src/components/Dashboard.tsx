@@ -1,16 +1,17 @@
 import React, { useContext } from "react";
 import { productContext } from "../context";
 import { Product } from "../types";
-import { Link } from "react-router-dom";
 import "../tailwind.output.css";
 
 export const Dashboard = () => {
   const products = useContext(productContext);
   return (
-    <section style={{ backgroundColor: " #eee;" }}>
-      {products?.map((product: Product) => (
-        <ProductCard product={product} />
-      ))}
+    <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-screen">
+      <div className="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {products?.map((product: Product) => (
+          <ProductCard product={product} />
+        ))}
+      </div>
     </section>
   );
 };
@@ -18,9 +19,7 @@ const ProductCard = (props: { product: Product }) => {
   return (
     <div className="flex justify-center" key={props.product.SKU}>
       <div className="rounded-lg shadow-lg bg-white max-w-sm">
-        <a href="#!">
-          <img className="rounded-t-lg" src={props.product.image} alt="" />
-        </a>
+        <img className="rounded-t-lg" src={props.product.image} alt="" />
         <div className="p-6">
           <h5 className="text-gray-900 text-xl font-medium mb-2">
             {props.product.title}
