@@ -35,7 +35,7 @@ const sampleProducts = [
 ];
 root.render(
   <React.StrictMode>
-    <authContext.Provider value={undefined}>
+    <authContext.Provider value={sampleUser as User}>
       <productContext.Provider value={sampleProducts}>
         <App />
       </productContext.Provider>

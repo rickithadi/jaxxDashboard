@@ -16,7 +16,7 @@ export const Dashboard = () => {
 };
 const ProductCard = (props: { product: Product }) => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" key={props.product.SKU}>
       <div className="rounded-lg shadow-lg bg-white max-w-sm">
         <a href="#!">
           <img className="rounded-t-lg" src={props.product.image} alt="" />
@@ -27,12 +27,12 @@ const ProductCard = (props: { product: Product }) => {
           </h5>
           <p className="text-gray-700 text-base mb-4">{props.product.SKU}</p>
 
-          <Link
-            to={`/${props.product.SKU}`}
+          <a
+            href={`/item/${props.product.SKU}`}
             className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
           >
             View
-          </Link>
+          </a>
         </div>
       </div>
     </div>
