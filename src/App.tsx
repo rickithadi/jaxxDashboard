@@ -24,6 +24,7 @@ export const App = () => {
   return (
     <Router>
       <Switch>
+        <Route exact path="/login" component={() => <LoginPage />} />
         {/* Private Routes */}
         <PrivateRoute
           exact
@@ -38,12 +39,12 @@ export const App = () => {
         />
 
         <PrivateRoute
+          exact
           path="/dashboard"
           component={() => withAuthedHeader(<Dashboard />)}
         />
-        <PrivateRoute path="/" component={() => <Redirect to="/dashboard" />} />
-        <Route path="/login" component={() => <LoginPage />} />
-        <Route path="/" component={() => <Redirect to="/login" />} />
+        {/* fallback */}
+        <PrivateRoute path="*" component={() => <Redirect to="/dashboard" />} />
       </Switch>
     </Router>
   );

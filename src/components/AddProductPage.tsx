@@ -14,7 +14,7 @@ export const AddProductPage = () => {
     console.log("created product");
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 ">
       <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
         {errors.general && (
           <div className="mb-3 text-normal text-red-500 ">{errors.general}</div>
