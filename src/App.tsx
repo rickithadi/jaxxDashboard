@@ -4,9 +4,10 @@ import { Dashboard } from "./components/Dashboard";
 import { authContext } from "./context";
 
 function App() {
-  const { user } = useContext(authContext);
+  const user = useContext(authContext);
   return (
     <div className="App">
+      {console.log('user', user)}
       {user ? (
         <Dashboard />
       ) : (

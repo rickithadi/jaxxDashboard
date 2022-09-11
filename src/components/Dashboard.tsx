@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
 export const Dashboard = () => {
+  const products = useContext(productContext);
   return (
     <div className="App">
+      {console.log("products", products)}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
