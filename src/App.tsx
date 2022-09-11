@@ -1,12 +1,18 @@
 import React, { useContext } from "react";
-import "./App.css";
 import { Dashboard } from "./components/Dashboard";
+import { BrowserRouter as Router, Route, Link } from "react-routerdom";
+
+import "./index.css";
 import { authContext } from "./context";
+import { ProductPage } from "./components/ProductPage";
 
 function App() {
   const user = useContext(authContext);
+
   return (
-    <div className="App">
+    <div>
+                <Route path="/:id" children={<ProductPage />} />
+
       {user ? (
         <Dashboard />
       ) : (

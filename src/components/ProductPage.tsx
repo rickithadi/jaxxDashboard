@@ -1,21 +1,7 @@
-import React from "react";
+import { useParams } from "react-router-dom";
 
-type Props = {
-  productId: string;
-};
-export const ProductPage = (productId: Props) => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const ProductPage = () => {
+  let { id } = useParams<{ id?: string }>();
+
+  return <h1>{id}</h1>;
 };

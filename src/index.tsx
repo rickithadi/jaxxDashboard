@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 import "./tailwind.output.css";
 import "./index.css";
@@ -25,7 +26,9 @@ root.render(
   <React.StrictMode>
     <authContext.Provider value={sampleUser as User}>
       <productContext.Provider value={sampleProducts}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </productContext.Provider>
     </authContext.Provider>
   </React.StrictMode>
