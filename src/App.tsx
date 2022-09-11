@@ -1,28 +1,22 @@
 import React, { useContext } from "react";
 import { Dashboard } from "./components/Dashboard";
 
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import "./index.css";
 import { authContext } from "./context";
 import { ProductPage } from "./components/ProductPage";
+import { LoginPage } from "./components/LoginPage";
 
 function App() {
   const user = useContext(authContext);
 
   return (
     <div>
-      {user ? (
-        <Switch>
-          <Route path="/:id" children={<ProductPage />}/>
-          <Route path="/" children={<Dashboard />}></Route>
-        </Switch>
-      ) : (
-        <Route path="/login">
-          <div>
-            <h1>log in</h1>
-          </div>
-        </Route>
-      )}
+      <Route exact path="/">
+        {user ? <Dashboard /> : <LoginPage />}
+      </Route>
+
+      {user && <Route path="/:id" children={<ProductPage />} />}
     </div>
   );
 }
