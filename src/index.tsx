@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 
 import "./tailwind.output.css";
 import "./index.css";
-import App from "./App";
+import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { authContext, productContext } from "./context";
 import { User } from "./types";
@@ -38,9 +37,7 @@ root.render(
   <React.StrictMode>
     <authContext.Provider value={undefined}>
       <productContext.Provider value={sampleProducts}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <App />
       </productContext.Provider>
     </authContext.Provider>
   </React.StrictMode>
