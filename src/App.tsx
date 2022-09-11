@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Dashboard } from "./components/Dashboard";
-import { BrowserRouter as Router, Route, Link } from "react-routerdom";
 
+import { Route, Switch } from "react-router-dom";
 import "./index.css";
 import { authContext } from "./context";
 import { ProductPage } from "./components/ProductPage";
@@ -11,14 +11,17 @@ function App() {
 
   return (
     <div>
-                <Route path="/:id" children={<ProductPage />} />
-
       {user ? (
-        <Dashboard />
+        <Switch>
+          <Route path="/:id" children={<ProductPage />}/>
+          <Route path="/" children={<Dashboard />}></Route>
+        </Switch>
       ) : (
-        <div>
-          <h1>log in</h1>
-        </div>
+        <Route path="/login">
+          <div>
+            <h1>log in</h1>
+          </div>
+        </Route>
       )}
     </div>
   );

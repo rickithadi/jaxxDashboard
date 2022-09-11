@@ -16,7 +16,19 @@ const root = ReactDOM.createRoot(
 const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
 const sampleProducts = [
   {
-    SKU: "longSKU",
+    SKU: "001",
+    image:
+      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
+    title: "test",
+  },
+  {
+    SKU: "002",
+    image:
+      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
+    title: "test",
+  },
+  {
+    SKU: "003",
     image:
       "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
     title: "test",
