@@ -1,6 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
 type Props = {
   productId: string;
@@ -9,8 +7,6 @@ export const ProductPage = (productId: Props) => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>displaying {productId}</p>
         <a
           className="App-link"
           href="https://reactjs.org"

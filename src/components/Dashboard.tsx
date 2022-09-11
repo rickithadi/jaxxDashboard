@@ -1,26 +1,21 @@
-import React, { useContext } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { useContext, useEffect } from "react";
+import { productContext } from "../context";
+import { Product } from "../types";
 
 export const Dashboard = () => {
   const products = useContext(productContext);
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
   return (
     <div className="App">
-      {console.log("products", products)}
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>products</h1>
+      {products?.map((product: Product) => (
+        <ProductCard product={product} />
+      ))}
     </div>
   );
+};
+const ProductCard = (props: { product: Product }) => {
+  return <h1>{props.product.SKU}</h1>;
 };
