@@ -29,6 +29,10 @@ export const App = () => {
           path="/dashboard/:id"
           component={() => withAuthedHeader(<ProductPage />)}
         />
+
+        <PrivateRoute path="*" component={() => <Redirect to="/dashboard" />} />
+
+        <Route path="*" component={() => <Redirect to="/dashboard" />} />
       </Switch>
     </BrowserRouter>
   );
