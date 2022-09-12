@@ -11,11 +11,31 @@ interface Product {
 }
 
 const products: Product[] = [
-  { SKU: "001", image: "user1", title: "Hello" },
-  { SKU: "002", image: "user1", title: "Hello" },
-  { SKU: "003", image: "user1", title: "Hello" },
-  { SKU: "004", image: "user1", title: "Hello" },
-  { SKU: "005", image: "user2", title: "Hi" },
+  {
+    SKU: "001",
+    title: "Hello",
+    image: " https://picsum.photos/200/300",
+  },
+  {
+    SKU: "002",
+    title: "Hello",
+    image: " https://picsum.photos/200/300",
+  },
+  {
+    SKU: "003",
+    title: "Hello",
+    image: " https://picsum.photos/200/300",
+  },
+  {
+    SKU: "004",
+    title: "Hello",
+    image: " https://picsum.photos/200/300",
+  },
+  {
+    SKU: "005",
+    title: "Hi",
+    image: " https://picsum.photos/200/300",
+  },
 ];
 
 const appRouter = trpc
