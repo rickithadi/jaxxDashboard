@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "npx nodemon ./index.ts"
+    "start": "npx nodemon ./index.ts",
+    "script": "cd scripts && ts-node"
   },
   "main": "index.ts",
   "dependencies": {
