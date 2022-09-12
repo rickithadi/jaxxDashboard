@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const AuthedHeader = () => {
   const currentRoute = useLocation().pathname;
@@ -13,7 +13,7 @@ export const AuthedHeader = () => {
     <nav className="navbar navbar-expand-lg shadow-md py-2 bg-white relative flex items-center w-full justify-between">
       <li className="nav-item">
         <div
-          className="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
+          className="nav-link block pr-2 lg:px-12 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
           data-mdb-ripple="true"
           data-mdb-ripple-color="light"
         >
@@ -25,7 +25,7 @@ export const AuthedHeader = () => {
                 focusable="false"
                 data-prefix="far"
                 data-icon="arrow-alt-circle-left"
-                className="w-7 h-7"
+                className="w-12 h-10 "
                 role="img"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
