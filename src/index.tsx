@@ -16,7 +16,6 @@ const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
 
 root.render(
   <React.StrictMode>
-    {/* <authContext.Provider value={undefined}> */}
     <authContext.Provider value={sampleUser as User}>
       <App />
     </authContext.Provider>
