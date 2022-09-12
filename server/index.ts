@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import * as trpc from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
@@ -9,7 +10,15 @@ interface Product {
   title: string;
   image: string;
 }
-
+const connectDB = async () => {
+  try {
+    await mongoose.connect("mongodb://localhost:27017");
+    console.log("🚀 Database connected...");
+  } catch (error: any) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 const products: Product[] = [
   {
     SKU: "001",
@@ -37,7 +46,6 @@ const products: Product[] = [
     image: " https://picsum.photos/600/700",
   },
 ];
-
 const appRouter = trpc
   .router()
   .query("hello", {
@@ -68,12 +76,10 @@ const appRouter = trpc
   .mutation("editProduct", {
     input: z.object({
       title: z.string(),
-      SKU: z.string(),
       image: z.string(),
     }),
     resolve({ input }) {
-      products.push(input);
-      return input;
+      return true;
     },
   })
   .mutation("addProduct", {
@@ -108,4 +114,5 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
   console.log(`api-server listening at http://localhost:${port}`);
+  connectDB();
 });
