@@ -14,27 +14,27 @@ const products: Product[] = [
   {
     SKU: "001",
     title: "Hello",
-    image: " https://picsum.photos/200/300",
+    image: " https://picsum.photos/600/700",
   },
   {
     SKU: "002",
     title: "Hello",
-    image: " https://picsum.photos/200/300",
+    image: " https://picsum.photos/600/700",
   },
   {
     SKU: "003",
     title: "Hello",
-    image: " https://picsum.photos/200/300",
+    image: " https://picsum.photos/600/700",
   },
   {
     SKU: "004",
     title: "Hello",
-    image: " https://picsum.photos/200/300",
+    image: " https://picsum.photos/600/700",
   },
   {
     SKU: "005",
     title: "Hi",
-    image: " https://picsum.photos/200/300",
+    image: " https://picsum.photos/600/700",
   },
 ];
 
@@ -49,6 +49,12 @@ const appRouter = trpc
     input: z.number().default(10),
     resolve({ input }) {
       return products.slice(-input);
+    },
+  })
+  .query("getProduct", {
+    input: z.string(),
+    resolve({ input }) {
+      return products.find((product) => input === product.SKU);
     },
   })
   .mutation("addProduct", {
