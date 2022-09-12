@@ -57,6 +57,25 @@ const appRouter = trpc
       return products.find((product) => input === product.SKU);
     },
   })
+  .mutation("deleteProduct", {
+    input: z.string(),
+    resolve({ input }) {
+      products.filter((product) => product.SKU !== input);
+      console.log(products);
+      return products;
+    },
+  })
+  .mutation("editProduct", {
+    input: z.object({
+      title: z.string(),
+      SKU: z.string(),
+      image: z.string(),
+    }),
+    resolve({ input }) {
+      products.push(input);
+      return input;
+    },
+  })
   .mutation("addProduct", {
     input: z.object({
       title: z.string(),
