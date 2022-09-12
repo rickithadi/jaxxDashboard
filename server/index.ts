@@ -4,27 +4,27 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import { z } from "zod";
 import { connectDB } from "./dbHelpers";
+import { ProductModel } from "./products/products.model";
 
 const appRouter = trpc
   .router()
   .query("getProducts", {
     input: z.number().default(10),
     resolve({ input }) {
-      // return products.slice(-input);
+      return ProductModel.find({}, { limit: input }).lean();
     },
   })
   .query("getProduct", {
     input: z.string(),
     resolve({ input }) {
       // return products.find((product) => input === product.SKU);
+      return ProductModel.findById({ id: input }).lean();
     },
   })
   .mutation("deleteProduct", {
     input: z.string(),
     resolve({ input }) {
-      // products.filter((product) => product.SKU !== input);
-      // console.log(products);
-      // return products;
+      return ProductModel.findOneAndDelete({ id: input });
     },
   })
   .mutation("editProduct", {

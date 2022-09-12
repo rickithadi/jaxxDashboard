@@ -9,12 +9,12 @@ import * as Mongoose from "mongoose";
     {
       SKU: "001",
       title: "laptop",
-      image: " https://picsum.photos/600/700",
+      image: "https://picsum.photos/600/700",
     },
     {
       SKU: "002",
       title: "candy",
-      image: " https://picsum.photos/600/700",
+      image: "https://picsum.photos/600/700",
     },
     {
       SKU: "003",
@@ -24,12 +24,12 @@ import * as Mongoose from "mongoose";
     {
       SKU: "004",
       title: "carpet",
-      image: " https://picsum.photos/600/700",
+      image: "https://picsum.photos/600/700",
     },
     {
       SKU: "005",
       title: "Hi",
-      image: " https://picsum.photos/600/700",
+      image: "https://picsum.photos/600/700",
     },
   ];
 
