@@ -11,14 +11,14 @@ const appRouter = trpc
   .query("getProducts", {
     input: z.number().default(10),
     resolve({ input }) {
-      return ProductModel.find({}, { limit: input }).lean();
+      return ProductModel.find({ limit: input });
     },
   })
   .query("getProduct", {
     input: z.string(),
     resolve({ input }) {
-      // return products.find((product) => input === product.SKU);
-      return ProductModel.findById({ id: input }).lean();
+      console.log(input);
+      return ProductModel.findById(input).lean();
     },
   })
   .mutation("deleteProduct", {

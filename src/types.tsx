@@ -6,6 +6,7 @@ export type User = {
 };
 export type Product = {
   SKU: string;
+  _id?: string;
   title: string;
   image: string;
 };
