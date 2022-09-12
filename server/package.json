@@ -5,6 +5,7 @@
   "scripts": {
     "start": "ts-node index.ts"
   },
+  "main": "index.ts",
   "dependencies": {
     "@trpc/server": "^9.18.0",
     "concurrently": "^7.4.0",
