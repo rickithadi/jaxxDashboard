@@ -6,9 +6,10 @@
     "start": "ts-node index.ts"
   },
   "dependencies": {
-    "express": "^4.17.1",
     "@trpc/server": "^9.18.0",
+    "concurrently": "^7.4.0",
     "cors": "^2.8.5",
+    "express": "^4.17.1",
     "zod": "^3.11.6"
   },
   "devDependencies": {
