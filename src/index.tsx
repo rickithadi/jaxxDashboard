@@ -5,7 +5,7 @@ import "./tailwind.output.css";
 import "./index.css";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { authContext, productContext } from "./context";
+import { authContext } from "./context";
 import { User } from "./types";
 
 const root = ReactDOM.createRoot(
@@ -13,33 +13,12 @@ const root = ReactDOM.createRoot(
 );
 // TODO replace with api calls
 const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
-const sampleProducts = [
-  {
-    SKU: "001",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-  {
-    SKU: "002",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-  {
-    SKU: "003",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-];
+
 root.render(
   <React.StrictMode>
     {/* <authContext.Provider value={undefined}> */}
     <authContext.Provider value={sampleUser as User}>
-      <productContext.Provider value={sampleProducts}>
-        <App />
-      </productContext.Provider>
+      <App />
     </authContext.Provider>
   </React.StrictMode>
 );

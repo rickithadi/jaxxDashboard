@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Dashboard } from "./components/Dashboard";
 import {
   BrowserRouter as Router,
@@ -13,8 +13,22 @@ import { ProductPage } from "./components/ProductPage";
 import { LoginPage } from "./components/LoginPage";
 import { AuthedHeader } from "./components/AuthedHeader";
 import { AddProductPage } from "./components/AddProductPage";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { trpc } from "./trpc";
 
 export const App = () => {
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      url: "http://localhost:8080/trpc",
+      // optional
+      // headers() {
+      //   return {
+      //     authorization: getAuthCookie(),
+      //   };
+      // },
+    })
+  );
   const withAuthedHeader = (component: JSX.Element) => (
     <>
       <AuthedHeader />
@@ -22,31 +36,38 @@ export const App = () => {
     </>
   );
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/login" component={() => <LoginPage />} />
-        {/* Private Routes */}
-        <PrivateRoute
-          exact
-          path="/add"
-          component={() => withAuthedHeader(<AddProductPage />)}
-        />
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Switch>
+            <Route exact path="/login" component={() => <LoginPage />} />
+            {/* Private Routes */}
+            <PrivateRoute
+              exact
+              path="/add"
+              component={() => withAuthedHeader(<AddProductPage />)}
+            />
 
-        <PrivateRoute
-          exact
-          path="/item/:id"
-          component={() => withAuthedHeader(<ProductPage />)}
-        />
+            <PrivateRoute
+              exact
+              path="/item/:id"
+              component={() => withAuthedHeader(<ProductPage />)}
+            />
 
-        <PrivateRoute
-          exact
-          path="/dashboard"
-          component={() => withAuthedHeader(<Dashboard />)}
-        />
-        {/* fallback */}
-        <PrivateRoute path="*" component={() => <Redirect to="/dashboard" />} />
-      </Switch>
-    </Router>
+            <PrivateRoute
+              exact
+              path="/dashboard"
+              component={() => withAuthedHeader(<Dashboard />)}
+            />
+            {/* fallback */}
+            <PrivateRoute
+              path="*"
+              component={() => <Redirect to="/dashboard" />}
+            />
+          </Switch>
+        </Router>
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 };
 
