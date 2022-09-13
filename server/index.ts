@@ -15,6 +15,22 @@ const appRouter = trpc
       return "bar";
     },
   })
+  .query("login", {
+    input: z.string(),
+    async resolve(req) {
+      return { id: req.input, name: "Bilbo" };
+    },
+  })
+  .mutation("createUser", {
+    // validate input with Zod
+    input: z.object({ name: z.string().min(5) }),
+    async resolve(req) {
+      // use your ORM of choice
+      return await UserModel.create({
+        data: req.input,
+      });
+    },
+  })
   .merge(
     "products.",
     trpc
@@ -23,7 +39,7 @@ const appRouter = trpc
         // if (!ctx.user) {
         //   throw new TRPCError({ code: "UNAUTHORIZED" });
         // }
-        console.log('man is authenticated')
+        console.log("man is authenticated");
         return next();
       })
       .query("secretPlace", {
