@@ -24,7 +24,8 @@ const appRouter = trpc
   .mutation("deleteProduct", {
     input: z.string(),
     resolve({ input }) {
-      return ProductModel.findOneAndDelete({ id: input });
+      console.log(input);
+      return ProductModel.findOneAndDelete({ _id: input });
     },
   })
   .mutation("editProduct", {
