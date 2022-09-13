@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "./tailwind.output.css";
 import "./index.css";
@@ -15,11 +16,14 @@ const root = ReactDOM.createRoot(
 const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
 
 root.render(
-  <React.StrictMode>
+  //NOTE router v5 doesnt work with react 18, thought i was going crazy https://github.com/remix-run/react-router/issues/7870
+  // <React.StrictMode>
     <authContext.Provider value={sampleUser as User}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </authContext.Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { Product } from "../types";
 import "../tailwind.output.css";
 import { trpc } from "../trpc";
@@ -32,12 +34,12 @@ const ProductCard = (props: { product: Product }) => {
         </h5>
         <p className="text-gray-700 text-base mb-4">{props.product.title}</p>
       </div>
-      <a
-        href={`/item/${props.product?._id}`}
+      <Link
+        to={`/item/${props.product?._id}`}
         className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
       >
         View
-      </a>
+      </Link>
     </div>
   );
 };

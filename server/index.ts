@@ -17,7 +17,6 @@ const appRouter = trpc
   .query("getProduct", {
     input: z.string(),
     resolve({ input }) {
-      console.log(input);
       return ProductModel.findById(input).lean();
     },
   })

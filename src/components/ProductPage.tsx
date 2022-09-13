@@ -8,19 +8,12 @@ export const ProductPage = () => {
 
   const [deleting, setDelete] = useState(false);
   const [edit, setEdit] = useState(false);
-  const queryClient = useQueryClient();
 
   let history = createBrowserHistory();
   const { data: product, error } = trpc.useQuery(["getProduct", id]);
 
-  useEffect(() => {
-    if (!product) return history.push("/dashboard");
-  }, [product]);
   const deleteMutation = trpc.useMutation("deleteProduct", {
-    onSuccess: () =>
-      queryClient
-        .invalidateQueries(["getProduct", id])
-        .then(() => setDelete(false)),
+    onSuccess: () => history.push("/dashboard"),
   });
 
   const deleteProduct = () => {

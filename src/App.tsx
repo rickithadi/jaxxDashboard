@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Dashboard } from "./components/Dashboard";
 import {
-  BrowserRouter as Router,
   Switch,
   Redirect,
   Route,
@@ -38,7 +37,6 @@ export const App = () => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <Router>
           <Switch>
             <Route exact path="/login" component={() => <LoginPage />} />
             {/* Private Routes */}
@@ -65,7 +63,6 @@ export const App = () => {
               component={() => <Redirect to="/dashboard" />}
             />
           </Switch>
-        </Router>
       </QueryClientProvider>
     </trpc.Provider>
   );
