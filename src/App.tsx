@@ -1,10 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Dashboard } from "./components/Dashboard";
-import {
-  Switch,
-  Redirect,
-  Route,
-} from "react-router-dom";
+import { Switch, Redirect, Route } from "react-router-dom";
 
 import "./index.css";
 import { authContext } from "./context";
@@ -37,32 +33,32 @@ export const App = () => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-          <Switch>
-            <Route exact path="/login" component={() => <LoginPage />} />
-            {/* Private Routes */}
-            <PrivateRoute
-              exact
-              path="/add"
-              component={() => withAuthedHeader(<AddProductPage />)}
-            />
+        <Switch>
+          {/* fallback */}
+         <PrivateRoute
+            exact
+            path="/dashboard"
+            component={() => withAuthedHeader(<Dashboard />)}
+          />
+          <Route exact path="/login" component={() => <LoginPage />} />
+          {/* Private Routes */}
+          <PrivateRoute
+            exact
+            path="/add"
+            component={() => withAuthedHeader(<AddProductPage />)}
+          />
 
-            <PrivateRoute
-              exact
-              path="/item/:id"
-              component={() => withAuthedHeader(<ProductPage />)}
-            />
+          <PrivateRoute
+            exact
+            path="/item/:id"
+            component={() => withAuthedHeader(<ProductPage />)}
+          />
+       <PrivateRoute
+            path="/*"
+            component={() => <Redirect to="/dashboard" />}
+          />
 
-            <PrivateRoute
-              exact
-              path="/dashboard"
-              component={() => withAuthedHeader(<Dashboard />)}
-            />
-            {/* fallback */}
-            <PrivateRoute
-              path="*"
-              component={() => <Redirect to="/dashboard" />}
-            />
-          </Switch>
+        </Switch>
       </QueryClientProvider>
     </trpc.Provider>
   );

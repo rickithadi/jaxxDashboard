@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { createBrowserHistory } from "history";
+import { useHistory } from "react-router-dom";
 
 import { trpc } from "../trpc";
 
 export const AddProductPage = () => {
-  let history = createBrowserHistory();
-
+  let history = useHistory();
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [errors, setErrors] = useState({
@@ -15,10 +14,7 @@ export const AddProductPage = () => {
   });
 
   const createMutation = trpc.useMutation("addProduct", {
-    onSuccess: () => {
-      console.log("succ");
-      history.push("/dashboard");
-    },
+    onSuccess: () => history.push("/dashboard"),
     onError: (error) => setErrors({ ...errors, general: error.message }),
   });
 

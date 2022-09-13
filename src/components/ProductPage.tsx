@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { useHistory } from "react-router-dom";
 
 import { trpc } from "../trpc";
 
@@ -10,31 +10,25 @@ export const ProductPage = () => {
   const [deleting, setDelete] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  let history = createBrowserHistory();
+  let history = useHistory();
   const { data: product, error, refetch } = trpc.useQuery(["getProduct", id]);
   // TODO unsafe, figure out a type
   const [editProductInput, setEditProductInput] = useState(product as any);
 
   const deleteMutation = trpc.useMutation("deleteProduct", {
-    onSuccess: () => history.push({ pathname: "/dashboard" }),
+    onSuccess: () => history.push("/dashboard"),
   });
   const editMutation = trpc.useMutation("editProduct", {
-    onSuccess: () => refetch(),
+    onSuccess: () => refetch().then(() => setEdit(false)),
   });
+  useEffect(() => {
+    setEditProductInput(product);
+  }, [product, history]);
 
   const editProduct = () => {
-    if (!editProductInput?.title) {
-      setEditProductInput({ ...editProductInput, title: product?.title });
-    }
-    if (!editProductInput?.image) {
-      setEditProductInput({ ...editProductInput, image: product?.image });
-    }
-
-    setEdit(false);
     editMutation.mutate({ ...editProductInput, _id: product?._id });
   };
   const deleteProduct = () => {
-    setDelete(false);
     deleteMutation.mutate(product?._id);
   };
 
@@ -72,7 +66,7 @@ export const ProductPage = () => {
 
         <button
           disabled={!editProductInput}
-          className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+          className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center disabled:opacity-25"
           onClick={() => editProduct()}
         >
           Save

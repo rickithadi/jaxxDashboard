@@ -17,13 +17,13 @@ const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
 
 root.render(
   //NOTE router v5 doesnt work with react 18, thought i was going crazy https://github.com/remix-run/react-router/issues/7870
-  <React.StrictMode>
-    <authContext.Provider value={sampleUser as User}>
-      <Router>
-        <App />
-      </Router>
-    </authContext.Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <authContext.Provider value={sampleUser as User}>
+    <Router >
+      <App />
+    </Router>
+  </authContext.Provider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
