@@ -28,6 +28,7 @@ const appRouter = trpc
   })
   .mutation("editProduct", {
     input: z.object({
+      _id: z.string(),
       title: z.string(),
       image: z.string(),
     }),

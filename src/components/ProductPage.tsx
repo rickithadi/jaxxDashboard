@@ -3,23 +3,37 @@ import { useQueryClient } from "react-query";
 import { Redirect, useParams } from "react-router-dom";
 import { trpc } from "../trpc";
 import { createBrowserHistory } from "history";
+import { Product } from "../types";
+
 export const ProductPage = () => {
   let { id } = useParams<{ id: string }>();
 
   const [deleting, setDelete] = useState(false);
+  // TODO type
   const [edit, setEdit] = useState(false);
 
   let history = createBrowserHistory();
   const { data: product, error } = trpc.useQuery(["getProduct", id]);
+  const [editProductInput, setEditProductInput] = useState(product as any);
 
   const deleteMutation = trpc.useMutation("deleteProduct", {
     onSuccess: () => history.push("/dashboard"),
   });
+  const editMutation = trpc.useMutation("editProduct");
 
+  const editProduct = () => {
+    if (editProductInput) {
+      // console.log(blobToBase64(editProductInput.image as unknown as Blob));
+      console.log(editProductInput);
+      setEdit(false);
+    }
+    // if (editProductInput) {
+    //   editMutation.mutate(editProductInput);
+    // }
+  };
   const deleteProduct = () => {
     deleteMutation.mutate(product?._id);
   };
-
   const deleteModal = () => (
     <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
       <div className="bg-white px-16 py-14 rounded-md text-center">
@@ -42,23 +56,70 @@ export const ProductPage = () => {
     </div>
   );
 
+  const convertBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
   return (
     <>
       {error ? (
         <Redirect to="/dashboard" />
       ) : (
-        <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 px-12 px-0 ">
+        <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900  px-0 ">
           {deleting && deleteModal()}
           {product && (
             <div
               className="rounded-lg shadow-lg bg-white max-w-sm "
               key={product?.SKU}
             >
-              <img
-                className="rounded-t-lg"
-                src={product?.image}
-                alt={product?.title}
-              />
+              <div className="img-overlay-wrap">
+                <img
+                  className="rounded-t-lg"
+                  src={
+                    editProductInput?.image
+                      ? editProductInput?.image
+                      : product?.image
+                  }
+                  alt={product?.title}
+                />
+                {edit && (
+                  <div className="flex items-center space-x-6">
+                    <label className="block">
+                      <span className="sr-only">Choose profile photo</span>
+                      <input
+                        onChange={(event) => {
+                          if (event.target.files && event.target.files[0]) {
+                            let img = event.target.files[0];
+                            convertBase64(img).then((res) => {
+                              setEditProductInput({
+                                ...editProductInput,
+                                image: res,
+                              });
+                            });
+                          }
+                        }}
+                        type="file"
+                        className="block w-full text-sm text-slate-500
+      file:mr-4 file:py-2 file:px-4
+      file:rounded-full file:border-0
+      file:text-sm file:font-semibold
+      file:bg-violet-50 file:text-violet-700
+      hover:file:bg-violet-100
+    "
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>
+
               <div className="flex justify-between items-center px-2">
                 <div className="p-6">
                   <h5 className="text-gray-900 text-xl font-medium mb-2">
@@ -68,7 +129,13 @@ export const ProductPage = () => {
                     <input
                       className="text-gray-700 text-base mb-2"
                       placeholder={product?.title}
-                      value={product?.title}
+                      defaultValue={product?.title}
+                      onChange={(event) => {
+                        setEditProductInput({
+                          ...editProductInput,
+                          title: event.target.value,
+                        });
+                      }}
                     ></input>
                   ) : (
                     <p className="text-gray-700 text-base mb-4">
@@ -102,7 +169,7 @@ export const ProductPage = () => {
               {edit ? (
                 <button
                   className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
-                  onClick={() => setEdit(!edit)}
+                  onClick={() => editProduct()}
                 >
                   Save
                 </button>
