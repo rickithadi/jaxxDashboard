@@ -19,7 +19,7 @@ export const Dashboard = () => {
 const ProductCard = (props: { product: Product }) => {
   return (
     <div
-      className="rounded-lg shadow-lg bg-white max-w-sm"
+      className="rounded-lg shadow-lg bg-white max-w-sm w-80"
       key={props.product.SKU}
     >
       <img

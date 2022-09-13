@@ -3,7 +3,6 @@ import { useQueryClient } from "react-query";
 import { Redirect, useParams } from "react-router-dom";
 import { trpc } from "../trpc";
 import { createBrowserHistory } from "history";
-import { Product } from "../types";
 
 export const ProductPage = () => {
   let { id } = useParams<{ id: string }>();
@@ -14,16 +13,24 @@ export const ProductPage = () => {
 
   let history = createBrowserHistory();
   const { data: product, error, refetch } = trpc.useQuery(["getProduct", id]);
+  // TODO unsafe, figure out a type
   const [editProductInput, setEditProductInput] = useState(product as any);
 
   const deleteMutation = trpc.useMutation("deleteProduct", {
     onSuccess: () => history.push("/dashboard"),
   });
   const editMutation = trpc.useMutation("editProduct", {
-    onSuccess: () => history.push("/dashboard"),
+    onSuccess: () => refetch(),
   });
 
   const editProduct = () => {
+    if (!editProductInput?.title) {
+      setEditProductInput({ ...editProductInput, title: product?.title });
+    }
+    if (!editProductInput?.image) {
+      setEditProductInput({ ...editProductInput, image: product?.image });
+    }
+
     setEdit(false);
     editMutation.mutate(editProductInput);
   };
@@ -54,6 +61,7 @@ export const ProductPage = () => {
   const buttons = (edit: boolean) =>
     edit ? (
       <button
+        disabled={!editProductInput}
         className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
         onClick={() => editProduct()}
       >
@@ -88,7 +96,10 @@ export const ProductPage = () => {
         <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900  px-0 ">
           {deleting && deleteModal()}
           {product && (
-            <div className="rounded-lg shadow-lg bg-white w-80" key={product?.SKU}>
+            <div
+              className="rounded-lg shadow-lg bg-white w-80"
+              key={product?.SKU}
+            >
               <img
                 className="rounded-t-lg h-80 w-80"
                 src={
