@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { connectDB } from "./dbHelpers";
 import { ProductModel } from "./products/products.model";
+import { TRPCError } from "@trpc/server";
 
 const appRouter = trpc
   .router<Context>()
@@ -19,9 +20,10 @@ const appRouter = trpc
     trpc
       .router<Context>()
       .middleware(async ({ ctx, next }) => {
-        if (!ctx.user) {
-          throw new TRPCError({ code: "UNAUTHORIZED" });
-        }
+        // if (!ctx.user) {
+        //   throw new TRPCError({ code: "UNAUTHORIZED" });
+        // }
+        console.log('man is authenticated')
         return next();
       })
       .query("secretPlace", {
@@ -29,46 +31,47 @@ const appRouter = trpc
           return "a key";
         },
       })
-  .query("getProducts", {
-    input: z.number().default(10),
-    async resolve({ input }) {
-      return await ProductModel.find({ limit: input });
-    },
-  })
-  .query("getProduct", {
-    input: z.string(),
-    async resolve({ input }) {
-      return await ProductModel.findById(input).lean();
-    },
-  })
-  .mutation("deleteProduct", {
-    input: z.string(),
-    async resolve({ input }) {
-      return await ProductModel.findOneAndDelete({ _id: input });
-    },
-  })
-  .mutation("editProduct", {
-    input: z.object({
-      _id: z.string(),
-      title: z.string(),
-      image: z.string(),
-    }),
-    async resolve({ input }) {
-      return await ProductModel.findByIdAndUpdate(input._id, input, {
-        returnOriginal: false,
-      }).lean();
-    },
-  })
-  .mutation("addProduct", {
-    input: z.object({
-      title: z.string(),
-      image: z.string(),
-    }),
-    async resolve({ input }) {
-      return await ProductModel.create(input);
-    },
-  });
-  )
+      .query("getProducts", {
+        input: z.number().default(10),
+        async resolve({ input }) {
+          return await ProductModel.find({ limit: input });
+        },
+      })
+      .query("getProduct", {
+        input: z.string(),
+        async resolve({ input }) {
+          return await ProductModel.findById(input).lean();
+        },
+      })
+      .mutation("deleteProduct", {
+        input: z.string(),
+        async resolve({ input }) {
+          return await ProductModel.findOneAndDelete({ _id: input });
+        },
+      })
+      .mutation("editProduct", {
+        input: z.object({
+          _id: z.string(),
+          title: z.string(),
+          image: z.string(),
+        }),
+        async resolve({ input }) {
+          return await ProductModel.findByIdAndUpdate(input._id, input, {
+            returnOriginal: false,
+          }).lean();
+        },
+      })
+      .mutation("addProduct", {
+        input: z.object({
+          title: z.string(),
+          image: z.string(),
+        }),
+        async resolve({ input }) {
+          return await ProductModel.create(input);
+        },
+      })
+  );
+
 export type AppRouter = typeof appRouter;
 // created for each request
 const createContext = ({

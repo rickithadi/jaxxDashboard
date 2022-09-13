@@ -13,7 +13,7 @@ export const AddProductPage = () => {
     general: "",
   });
 
-  const createMutation = trpc.useMutation("addProduct", {
+  const createMutation = trpc.useMutation("products.addProduct", {
     onSuccess: () => history.push("/dashboard"),
     onError: (error) => setErrors({ ...errors, general: error.message }),
   });

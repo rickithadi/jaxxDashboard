@@ -11,14 +11,18 @@ export const ProductPage = () => {
   const [edit, setEdit] = useState(false);
 
   let history = useHistory();
-  const { data: product, error, refetch } = trpc.useQuery(["getProduct", id]);
+  const {
+    data: product,
+    error,
+    refetch,
+  } = trpc.useQuery(["products.getProduct", id]);
   // TODO unsafe, figure out a type
   const [editProductInput, setEditProductInput] = useState(product as any);
 
-  const deleteMutation = trpc.useMutation("deleteProduct", {
+  const deleteMutation = trpc.useMutation("products.deleteProduct", {
     onSuccess: () => history.push("/dashboard"),
   });
-  const editMutation = trpc.useMutation("editProduct", {
+  const editMutation = trpc.useMutation("products.editProduct", {
     onSuccess: () => refetch().then(() => setEdit(false)),
   });
   useEffect(() => {
