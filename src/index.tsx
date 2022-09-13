@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "./tailwind.output.css";
 import "./index.css";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { authContext, productContext } from "./context";
+import { authContext } from "./context";
 import { User } from "./types";
 
 const root = ReactDOM.createRoot(
@@ -13,35 +14,16 @@ const root = ReactDOM.createRoot(
 );
 // TODO replace with api calls
 const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
-const sampleProducts = [
-  {
-    SKU: "001",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-  {
-    SKU: "002",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-  {
-    SKU: "003",
-    image:
-      "https://pixabay.com/get/g1b51dd716ffb312ecd5c41c376bca7e41993728778926651d85f74f9a8f71daaf5f65e85418b66eca2b313c355f7559d2e461744a6ce43a44640c03827612769_640.jpg",
-    title: "test",
-  },
-];
+
 root.render(
-  <React.StrictMode>
-    {/* <authContext.Provider value={undefined}> */}
+  //NOTE router v5 doesnt work with react 18, thought i was going crazy https://github.com/remix-run/react-router/issues/7870
+  // <React.StrictMode>
     <authContext.Provider value={sampleUser as User}>
-      <productContext.Provider value={sampleProducts}>
+      <Router>
         <App />
-      </productContext.Provider>
+      </Router>
     </authContext.Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
