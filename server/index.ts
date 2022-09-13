@@ -2,11 +2,15 @@ import express from "express";
 import * as trpc from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
+import bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
+import expressjwt from "express-jwt";
 import { z } from "zod";
 
 import { connectDB } from "./dbHelpers";
 import { ProductModel } from "./products/products.model";
 import { TRPCError } from "@trpc/server";
+import { UserModel } from "./user/user.model";
 
 const appRouter = trpc
   .router<Context>()
@@ -16,19 +20,41 @@ const appRouter = trpc
     },
   })
   .query("login", {
-    input: z.string(),
-    async resolve(req) {
-      return { id: req.input, name: "Bilbo" };
+    input: z.object({
+      email: z.string(),
+      password: z.string(),
+    }),
+    async resolve({ input }) {
+      const user = await UserModel.findOne({ email: input.email });
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      } else {
+        const validPassword = await bcrypt.compare(
+          input.password,
+          user.password
+        );
+        if (!validPassword) {
+          throw new TRPCError({ code: "NOT_FOUND" });
+        } else {
+          const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
+          return token;
+        }
+      }
     },
   })
-  .mutation("createUser", {
-    // validate input with Zod
-    input: z.object({ name: z.string().min(5) }),
-    async resolve(req) {
-      // use your ORM of choice
-      return await UserModel.create({
-        data: req.input,
-      });
+  .mutation("signUp", {
+    input: z.object({
+      email: z.string(),
+      password: z.string(),
+    }),
+    async resolve({ input }) {
+      const alreadyExists = await UserModel.findOne({ email: input.email });
+      if (alreadyExists) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      } else {
+        const encryptedPassword = await bcrypt.hash(input.password, 10);
+        return UserModel.create({ email: input.email, encryptedPassword });
+      }
     },
   })
   .merge(
