@@ -11,21 +11,20 @@ const appRouter = trpc
   .router()
   .query("getProducts", {
     input: z.number().default(10),
-    resolve({ input }) {
-      return ProductModel.find({ limit: input });
+    async resolve({ input }) {
+      return await ProductModel.find({ limit: input });
     },
   })
   .query("getProduct", {
     input: z.string(),
-    resolve({ input }) {
-      return ProductModel.findById(input).lean();
+    async resolve({ input }) {
+      return await ProductModel.findById(input).lean();
     },
   })
   .mutation("deleteProduct", {
     input: z.string(),
-    resolve({ input }) {
-      console.log(input);
-      return ProductModel.findOneAndDelete({ _id: input });
+    async resolve({ input }) {
+      return await ProductModel.findOneAndDelete({ _id: input });
     },
   })
   .mutation("editProduct", {
@@ -34,8 +33,8 @@ const appRouter = trpc
       title: z.string(),
       image: z.string(),
     }),
-    resolve({ input }) {
-      return ProductModel.findByIdAndUpdate(input._id, input, {
+    async resolve({ input }) {
+      return await ProductModel.findByIdAndUpdate(input._id, input, {
         returnOriginal: false,
       }).lean();
     },
@@ -45,8 +44,8 @@ const appRouter = trpc
       title: z.string(),
       image: z.string(),
     }),
-    resolve({ input }) {
-      return ProductModel.create(input);
+    async resolve({ input }) {
+      return await ProductModel.create(input);
     },
   });
 
