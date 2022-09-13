@@ -33,7 +33,6 @@ const appRouter = trpc
       image: z.string(),
     }),
     resolve({ input }) {
-      console.log("editing product", input);
       return ProductModel.findByIdAndUpdate(input._id, input, {
         returnOriginal: false,
       });

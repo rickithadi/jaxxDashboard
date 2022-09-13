@@ -24,11 +24,8 @@ export const ProductPage = () => {
   });
 
   const editProduct = () => {
-    if (editProductInput) {
-      console.log(editProductInput);
-      setEdit(false);
-      editMutation.mutate(editProductInput);
-    }
+    setEdit(false);
+    editMutation.mutate(editProductInput);
   };
   const deleteProduct = () => {
     deleteMutation.mutate(product?._id);
@@ -54,6 +51,22 @@ export const ProductPage = () => {
       </div>
     </div>
   );
+  const buttons = (edit: boolean) =>
+    edit ? (
+      <button
+        className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+        onClick={() => editProduct()}
+      >
+        Save
+      </button>
+    ) : (
+      <button
+        className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+        onClick={() => setEdit(!edit)}
+      >
+        Edit
+      </button>
+    );
 
   const convertBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -75,49 +88,41 @@ export const ProductPage = () => {
         <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900  px-0 ">
           {deleting && deleteModal()}
           {product && (
-            <div
-              className="rounded-lg shadow-lg bg-white max-w-sm   "
-              key={product?.SKU}
-            >
-              <div className="img-overlay-wrap h-96 w-96">
-                <img
-                  className="rounded-t-lg "
-                  src={
-                    editProductInput?.image
-                      ? editProductInput?.image
-                      : product?.image
-                  }
-                  alt={product?.title}
-                />
-                {edit && (
-                  <div className="flex items-center space-x-6">
-                    <label className="block">
-                      <span className="sr-only">Choose profile photo</span>
-                      <input
-                        onChange={(event) => {
-                          if (event.target.files && event.target.files[0]) {
-                            let img = event.target.files[0];
-                            convertBase64(img).then((res) => {
-                              setEditProductInput({
-                                ...editProductInput,
-                                image: res,
-                              });
-                            });
-                          }
-                        }}
-                        type="file"
-                        className="block w-full text-sm text-slate-500
+            <div className="rounded-lg shadow-lg bg-white w-80" key={product?.SKU}>
+              <img
+                className="rounded-t-lg h-80 w-80"
+                src={
+                  editProductInput?.image
+                    ? editProductInput?.image
+                    : product?.image
+                }
+                alt={product?.title}
+              />
+              {edit && (
+                <div className="flex items-center  ">
+                  <input
+                    onChange={(event) => {
+                      if (event.target.files && event.target.files[0]) {
+                        let img = event.target.files[0];
+                        convertBase64(img).then((res) => {
+                          setEditProductInput({
+                            ...editProductInput,
+                            image: res,
+                          });
+                        });
+                      }
+                    }}
+                    type="file"
+                    className="block w-half text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0
       file:text-sm file:font-semibold
       file:bg-violet-50 file:text-violet-700
       hover:file:bg-violet-100
     "
-                      />
-                    </label>
-                  </div>
-                )}
-              </div>
+                  />
+                </div>
+              )}
 
               <div className="flex justify-between items-center px-2">
                 <div className="p-6">
@@ -126,7 +131,7 @@ export const ProductPage = () => {
                   </h5>
                   {edit ? (
                     <input
-                      className="text-gray-700 text-base mb-2"
+                      className="text-gray-700 text-base mb-4"
                       placeholder={product?.title}
                       defaultValue={product?.title}
                       onChange={(event) => {
@@ -165,21 +170,7 @@ export const ProductPage = () => {
                   </button>
                 )}
               </div>
-              {edit ? (
-                <button
-                  className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
-                  onClick={() => editProduct()}
-                >
-                  Save
-                </button>
-              ) : (
-                <button
-                  className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
-                  onClick={() => setEdit(!edit)}
-                >
-                  Edit
-                </button>
-              )}
+              {buttons(edit)}
             </div>
           )}
         </div>
