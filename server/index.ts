@@ -34,7 +34,6 @@ const appRouter = trpc
       image: z.string(),
     }),
     resolve({ input }) {
-      console.log("edit", input._id);
       return ProductModel.findByIdAndUpdate(input._id, input, {
         returnOriginal: false,
       }).lean();
@@ -46,7 +45,6 @@ const appRouter = trpc
       image: z.string(),
     }),
     resolve({ input }) {
-      console.log("cearting", input);
       return ProductModel.create(input);
     },
   });

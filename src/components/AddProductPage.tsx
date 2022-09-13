@@ -15,13 +15,15 @@ export const AddProductPage = () => {
   });
 
   const createMutation = trpc.useMutation("addProduct", {
-    onSuccess: () => history.push("/dashboard"),
+    onSuccess: () => {
+      console.log("succ");
+      history.push("/dashboard");
+    },
+    onError: (error) => setErrors({ ...errors, general: error.message }),
   });
 
   const createProduct = () => {
-    //make api call to create product
     createMutation.mutate({ title, image });
-    console.log("created product", title, image);
   };
   const convertBase64 = (file: File) => {
     return new Promise((resolve, reject) => {

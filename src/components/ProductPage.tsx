@@ -16,7 +16,7 @@ export const ProductPage = () => {
   const [editProductInput, setEditProductInput] = useState(product as any);
 
   const deleteMutation = trpc.useMutation("deleteProduct", {
-    onSuccess: () => history.push("/dashboard"),
+    onSuccess: () => history.push({ pathname: "/dashboard" }),
   });
   const editMutation = trpc.useMutation("editProduct", {
     onSuccess: () => refetch(),
@@ -31,9 +31,10 @@ export const ProductPage = () => {
     }
 
     setEdit(false);
-    editMutation.mutate(editProductInput);
+    editMutation.mutate({ ...editProductInput, _id: product?._id });
   };
   const deleteProduct = () => {
+    setDelete(false);
     deleteMutation.mutate(product?._id);
   };
 
@@ -42,7 +43,7 @@ export const ProductPage = () => {
     <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
       <div className="bg-white px-16 py-14 rounded-md text-center">
         <h1 className="text-xl mb-4 font-bold text-slate-500">
-          Do you Want Delete {product?.title} #{product?._id}
+          Delete {product?.title} #{product?._id}?
         </h1>
         <button
           className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
@@ -61,20 +62,37 @@ export const ProductPage = () => {
   );
   const buttons = (edit: boolean) =>
     edit ? (
-      <button
-        disabled={!editProductInput}
-        className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
-        onClick={() => editProduct()}
-      >
-        Save
-      </button>
+      <div className="flex space-x-2 justify-center">
+        <button
+          className=" inline-block px-6 py-2.5 bg-yellow-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-yellow-700 hover:shadow-lg focus:bg-yellow-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-yellow-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+          onClick={() => setEdit(!edit)}
+        >
+          cancel
+        </button>
+
+        <button
+          disabled={!editProductInput}
+          className=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+          onClick={() => editProduct()}
+        >
+          Save
+        </button>
+      </div>
     ) : (
-      <button
-        className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
-        onClick={() => setEdit(!edit)}
-      >
-        Edit
-      </button>
+      <div className="flex space-x-2 justify-center">
+        <button
+          className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+          onClick={() => setEdit(!edit)}
+        >
+          Edit
+        </button>
+        <button
+          className=" inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out w-full text-center"
+          onClick={() => setDelete(true)}
+        >
+          Delete
+        </button>
+      </div>
     );
   //  TODO seperate into helper
   const convertBase64 = (file: File) => {
@@ -136,7 +154,6 @@ export const ProductPage = () => {
                   />
                 </div>
               )}
-
               <div className="flex justify-between items-center px-2">
                 <div className="p-6">
                   <h5 className="text-gray-900 text-xl font-medium mb-2">
@@ -145,6 +162,7 @@ export const ProductPage = () => {
                   {edit ? (
                     <input
                       className="text-gray-700 text-base mb-4"
+                      autoFocus
                       placeholder={product?.title}
                       defaultValue={product?.title}
                       onChange={(event) => {
@@ -160,28 +178,6 @@ export const ProductPage = () => {
                     </p>
                   )}
                 </div>
-                {!edit && (
-                  <button
-                    className="flex items-center justify-center text-xs font-medium rounded-full px-5 py-2 space-x-1 bg-red-500 text-black"
-                    onClick={() => setDelete(true)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="white"
-                      className="bi bi-trash"
-                      viewBox="0 0 16 16"
-                    >
-                      {" "}
-                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{" "}
-                      <path
-                        fill-rule="evenodd"
-                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                      />{" "}
-                    </svg>
-                  </button>
-                )}
               </div>
               {buttons(edit)}
             </div>
