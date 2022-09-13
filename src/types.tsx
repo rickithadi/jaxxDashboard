@@ -5,8 +5,7 @@ export type User = {
   hash: string;
 };
 export type Product = {
-  SKU: string;
-  _id?: string;
+  _id: string; //this is SKU as well
   title: string;
   image: string;
 };

@@ -3,6 +3,7 @@ import * as trpc from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import { z } from "zod";
+
 import { connectDB } from "./dbHelpers";
 import { ProductModel } from "./products/products.model";
 
@@ -23,27 +24,29 @@ const appRouter = trpc
   .mutation("deleteProduct", {
     input: z.string(),
     resolve({ input }) {
-      return ProductModel.findOneAndDelete({ id: input });
+      console.log(input);
+      return ProductModel.findOneAndDelete({ _id: input });
     },
   })
   .mutation("editProduct", {
     input: z.object({
+      _id: z.string(),
       title: z.string(),
       image: z.string(),
     }),
     resolve({ input }) {
-      return true;
+      return ProductModel.findByIdAndUpdate(input._id, input, {
+        returnOriginal: false,
+      }).lean();
     },
   })
   .mutation("addProduct", {
     input: z.object({
       title: z.string(),
-      SKU: z.string(),
       image: z.string(),
     }),
     resolve({ input }) {
-      // products.push(input);
-      // return input;
+      return ProductModel.create(input);
     },
   });
 

@@ -1,7 +1,6 @@
 import { Document, Model } from "mongoose";
 
 export interface IProduct {
-  SKU: string;
   title: string;
   image: string;
 }
