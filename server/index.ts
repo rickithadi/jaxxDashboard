@@ -8,7 +8,27 @@ import { connectDB } from "./dbHelpers";
 import { ProductModel } from "./products/products.model";
 
 const appRouter = trpc
-  .router()
+  .router<Context>()
+  .query("foo", {
+    resolve() {
+      return "bar";
+    },
+  })
+  .merge(
+    "products.",
+    trpc
+      .router<Context>()
+      .middleware(async ({ ctx, next }) => {
+        if (!ctx.user) {
+          throw new TRPCError({ code: "UNAUTHORIZED" });
+        }
+        return next();
+      })
+      .query("secretPlace", {
+        resolve() {
+          return "a key";
+        },
+      })
   .query("getProducts", {
     input: z.number().default(10),
     async resolve({ input }) {
@@ -48,8 +68,15 @@ const appRouter = trpc
       return await ProductModel.create(input);
     },
   });
-
+  )
 export type AppRouter = typeof appRouter;
+// created for each request
+const createContext = ({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) => ({}); // no context
+
+type Context = trpc.inferAsyncReturnType<typeof createContext>;
 
 const app = express();
 app.use(cors());
@@ -59,7 +86,7 @@ app.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
     router: appRouter,
-    // createContext: () => null,
+    createContext,
   })
 );
 
