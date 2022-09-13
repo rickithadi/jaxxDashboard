@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { createBrowserHistory } from "history";
+
+import { trpc } from "../trpc";
 
 export const AddProductPage = () => {
+  let history = createBrowserHistory();
+
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [errors, setErrors] = useState({
@@ -9,9 +14,26 @@ export const AddProductPage = () => {
     general: "",
   });
 
+  const createMutation = trpc.useMutation("addProduct", {
+    onSuccess: () => history.push("/dashboard"),
+  });
+
   const createProduct = () => {
     //make api call to create product
-    console.log("created product");
+    createMutation.mutate({ title, image });
+    console.log("created product", title, image);
+  };
+  const convertBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 ">
@@ -46,7 +68,7 @@ export const AddProductPage = () => {
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              placeholder="Enter email"
+              placeholder="Very interesting Product"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -70,8 +92,14 @@ export const AddProductPage = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setImage(e.target.value)}
-              value={image}
+              onChange={(event) => {
+                if (event.target.files && event.target.files[0]) {
+                  let img = event.target.files[0];
+                  convertBase64(img).then((res) => {
+                    setImage(res as string);
+                  });
+                }
+              }}
               className="form-control block
         w-full
         px-3

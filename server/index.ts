@@ -3,6 +3,7 @@ import * as trpc from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import { z } from "zod";
+
 import { connectDB } from "./dbHelpers";
 import { ProductModel } from "./products/products.model";
 
@@ -42,10 +43,10 @@ const appRouter = trpc
   .mutation("addProduct", {
     input: z.object({
       title: z.string(),
-      SKU: z.string(),
       image: z.string(),
     }),
     resolve({ input }) {
+      console.log("cearting", input);
       return ProductModel.create(input);
     },
   });

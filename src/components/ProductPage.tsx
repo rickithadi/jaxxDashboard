@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
+import { useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { trpc } from "../trpc";
 import { createBrowserHistory } from "history";
+
+import { trpc } from "../trpc";
 
 export const ProductPage = () => {
   let { id } = useParams<{ id: string }>();
 
   const [deleting, setDelete] = useState(false);
-  // TODO type
   const [edit, setEdit] = useState(false);
 
   let history = createBrowserHistory();
@@ -37,11 +36,13 @@ export const ProductPage = () => {
   const deleteProduct = () => {
     deleteMutation.mutate(product?._id);
   };
+
+  //TODO seperate into components
   const deleteModal = () => (
     <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
       <div className="bg-white px-16 py-14 rounded-md text-center">
         <h1 className="text-xl mb-4 font-bold text-slate-500">
-          Do you Want Delete {product?.title} #{product?.SKU}
+          Do you Want Delete {product?.title} #{product?._id}
         </h1>
         <button
           className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
@@ -75,7 +76,7 @@ export const ProductPage = () => {
         Edit
       </button>
     );
-
+  //  TODO seperate into helper
   const convertBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -98,7 +99,7 @@ export const ProductPage = () => {
           {product && (
             <div
               className="rounded-lg shadow-lg bg-white w-80"
-              key={product?.SKU}
+              key={product?._id}
             >
               <img
                 className="rounded-t-lg h-80 w-80"
@@ -124,6 +125,7 @@ export const ProductPage = () => {
                       }
                     }}
                     type="file"
+                    accept="image/*"
                     className="block w-half text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0
@@ -138,7 +140,7 @@ export const ProductPage = () => {
               <div className="flex justify-between items-center px-2">
                 <div className="p-6">
                   <h5 className="text-gray-900 text-xl font-medium mb-2">
-                    #{product?.SKU}
+                    #{product?._id}
                   </h5>
                   {edit ? (
                     <input

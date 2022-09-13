@@ -3,7 +3,6 @@
 import * as Mongoose from "mongoose";
 
 const ProductSchema = new Mongoose.Schema({
-  SKU: String,
   title: String,
   image: String,
 });
