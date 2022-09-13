@@ -13,23 +13,22 @@ export const ProductPage = () => {
   const [edit, setEdit] = useState(false);
 
   let history = createBrowserHistory();
-  const { data: product, error } = trpc.useQuery(["getProduct", id]);
+  const { data: product, error, refetch } = trpc.useQuery(["getProduct", id]);
   const [editProductInput, setEditProductInput] = useState(product as any);
 
   const deleteMutation = trpc.useMutation("deleteProduct", {
     onSuccess: () => history.push("/dashboard"),
   });
-  const editMutation = trpc.useMutation("editProduct");
+  const editMutation = trpc.useMutation("editProduct", {
+    onSuccess: () => history.push("/dashboard"),
+  });
 
   const editProduct = () => {
     if (editProductInput) {
-      // console.log(blobToBase64(editProductInput.image as unknown as Blob));
       console.log(editProductInput);
       setEdit(false);
+      editMutation.mutate(editProductInput);
     }
-    // if (editProductInput) {
-    //   editMutation.mutate(editProductInput);
-    // }
   };
   const deleteProduct = () => {
     deleteMutation.mutate(product?._id);
@@ -77,12 +76,12 @@ export const ProductPage = () => {
           {deleting && deleteModal()}
           {product && (
             <div
-              className="rounded-lg shadow-lg bg-white max-w-sm "
+              className="rounded-lg shadow-lg bg-white max-w-sm   "
               key={product?.SKU}
             >
-              <div className="img-overlay-wrap">
+              <div className="img-overlay-wrap h-96 w-96">
                 <img
-                  className="rounded-t-lg"
+                  className="rounded-t-lg "
                   src={
                     editProductInput?.image
                       ? editProductInput?.image

@@ -33,7 +33,10 @@ const appRouter = trpc
       image: z.string(),
     }),
     resolve({ input }) {
-      return true;
+      console.log("editing product", input);
+      return ProductModel.findByIdAndUpdate(input._id, input, {
+        returnOriginal: false,
+      });
     },
   })
   .mutation("addProduct", {
@@ -45,6 +48,7 @@ const appRouter = trpc
     resolve({ input }) {
       // products.push(input);
       // return input;
+      return ProductModel.create(input);
     },
   });
 

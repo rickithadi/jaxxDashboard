@@ -23,7 +23,7 @@ const ProductCard = (props: { product: Product }) => {
       key={props.product.SKU}
     >
       <img
-        className="rounded-t-lg"
+        className="rounded-t-lg h-96 w-96"
         src={props.product.image}
         alt={props.product.title}
       />
