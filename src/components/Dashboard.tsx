@@ -9,7 +9,7 @@ export const Dashboard = () => {
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-max min-h-screen">
       <div className="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {products?.data?.map((product: Product) => (
+        {products?.data?.reverse().map((product: Product) => (
           <ProductCard product={product} key={product._id} />
         ))}
       </div>
