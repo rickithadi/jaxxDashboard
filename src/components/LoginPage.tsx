@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { authContext } from "../context";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { trpc } from "../trpc";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,15 +12,25 @@ export const LoginPage = () => {
   });
   const [password, setPassword] = useState("");
   //TODO ugly
-  const user = useContext(authContext);
+  let history = useHistory();
+  const { user, setUser } = useContext(authContext);
   if (user) {
     return <Redirect to="/dashboard" />;
   }
+  // const loginMutation = trpc.useMutation("login");
+  const loginMutation = trpc.useMutation("login", {
+    onSuccess: (data) => console.log(data),
+    onError: (error) => {
+      console.log(error);
+      setErrors({ ...errors, general: error.message });
+    },
+  });
 
   const login = () => {
     if (!email) setErrors({ ...errors, email: "Email is required" });
     if (!password) setErrors({ ...errors, password: "Password is required" });
-    console.log(email, password);
+    console.log("submiting", email, password);
+    loginMutation.mutate({ email, password });
     // api post
     // setErrors({ ...errors, general: "Invalid email or password" });
   };

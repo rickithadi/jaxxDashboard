@@ -19,12 +19,14 @@ const appRouter = trpc
       return "bar";
     },
   })
-  .query("login", {
+  .mutation("login", {
     input: z.object({
       email: z.string(),
       password: z.string(),
     }),
     async resolve({ input }) {
+      console.log("loggin in", input);
+      console.log("loggin in", input);
       const user = await UserModel.findOne({ email: input.email });
       if (!user) {
         throw new TRPCError({ code: "NOT_FOUND" });
@@ -33,6 +35,7 @@ const appRouter = trpc
           input.password,
           user.password
         );
+        console.log(validPassword);
         if (!validPassword) {
           throw new TRPCError({ code: "NOT_FOUND" });
         } else {

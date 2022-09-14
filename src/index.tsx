@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -6,23 +5,16 @@ import "./tailwind.output.css";
 import "./index.css";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { authContext } from "./context";
-import { User } from "./types";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-// TODO replace with api calls
-const sampleUser = { name: "bob", email: "jim@gmail.com", image: "test" };
-
 root.render(
   //NOTE router v5 doesnt work with react 18, thought i was going crazy https://github.com/remix-run/react-router/issues/7870
   // <React.StrictMode>
-  <authContext.Provider value={sampleUser as User}>
-    <Router >
-      <App />
-    </Router>
-  </authContext.Provider>
+  <Router>
+    <App />
+  </Router>
   // </React.StrictMode>
 );
 
