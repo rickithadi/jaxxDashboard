@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Product } from "../types";
 import "../tailwind.output.css";
 import { trpc } from "../trpc";
-
 export const Dashboard = () => {
+
   const products = trpc.useQuery(["products.getProducts"]);
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-max min-h-screen">

@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
 import { Product, User } from "./types";
 
 // export const { authContext, setAuth } = createContext(undefined);

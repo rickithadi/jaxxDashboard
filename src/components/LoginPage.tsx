@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
-import { authContext } from "../context";
 import { Redirect, useHistory } from "react-router-dom";
+
+import { authContext } from "../context";
 import { trpc } from "../trpc";
 import { User } from "../types";
 
@@ -18,10 +19,11 @@ export const LoginPage = () => {
   if (user) {
     return <Redirect to="/dashboard" />;
   }
-  // const loginMutation = trpc.useMutation("login");
+
   const loginMutation = trpc.useMutation("login", {
     onSuccess: (data) => {
-      console.log(data);
+      //TODO figure out why headers are not set immediately, forcing refresh to fix
+      window.location.reload();
       setProfile(data);
     },
     onError: (error) => {
@@ -33,8 +35,8 @@ export const LoginPage = () => {
   const setProfile = (response: { token: string; user: User }) => {
     let user = { ...response.user };
     user.token = response.token;
-    setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
     return history.push("/dashboard");
   };
 

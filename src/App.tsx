@@ -23,7 +23,7 @@ export const App = () => {
       url: "http://localhost:8080/trpc",
       headers() {
         return {
-          authorization: user.token,
+          authorization: user?.token,
         };
       },
     })

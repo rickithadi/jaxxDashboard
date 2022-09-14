@@ -4,7 +4,6 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
-import expressjwt from "express-jwt";
 import { z } from "zod";
 
 import { connectDB } from "./dbHelpers";
@@ -24,7 +23,7 @@ const appRouter = trpc
       email: z.string(),
       password: z.string(),
     }),
-    async resolve({ input }) {
+    async resolve({ ctx, input }) {
       console.log("loggin in", input);
       const user = await UserModel.findOne({ email: input.email });
       if (!user) {
@@ -38,7 +37,7 @@ const appRouter = trpc
           throw new TRPCError({ code: "NOT_FOUND" });
         } else {
           const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
-          // response.header("authentication-token", token).send(token);
+          ctx.res.header("authorization", token);
           return { token, user };
         }
       }
@@ -72,6 +71,7 @@ const appRouter = trpc
         if (userExists) {
           return next();
         } else {
+          console.log(userExists);
           throw new TRPCError({ code: "UNAUTHORIZED" });
         }
       })
@@ -141,9 +141,7 @@ const createContext = ({
     if (!req.headers.authorization) {
       return notAuthenticated;
     } else {
-      // Validate Access Token
       const accessToken = req.headers.authorization;
-      // const userID = jwt.verify(accessToken, "secretShouldBeLonger");
       return {
         req,
         res,
