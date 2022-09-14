@@ -22,7 +22,7 @@ export const LoginPage = () => {
 
   const loginMutation = trpc.useMutation("login", {
     onSuccess: (data) => {
-      //TODO figure out why headers are not set immediately, forcing refresh to fix
+      //TODO figure out why headers are not set immediately, forcing refresh as workaround
       window.location.reload();
       setProfile(data);
     },

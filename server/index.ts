@@ -37,8 +37,8 @@ const appRouter = trpc
           throw new TRPCError({ code: "NOT_FOUND" });
         } else {
           const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
-          ctx.res.header("authorization", token);
-          return { token, user };
+          //TODO not working, need to set context on succesful login
+         return { token, user };
         }
       }
     },
