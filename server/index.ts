@@ -26,7 +26,6 @@ const appRouter = trpc
     }),
     async resolve({ input }) {
       console.log("loggin in", input);
-      console.log("loggin in", input);
       const user = await UserModel.findOne({ email: input.email });
       if (!user) {
         throw new TRPCError({ code: "NOT_FOUND" });
@@ -35,11 +34,11 @@ const appRouter = trpc
           input.password,
           user.password
         );
-        console.log(validPassword);
         if (!validPassword) {
           throw new TRPCError({ code: "NOT_FOUND" });
         } else {
           const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
+          // response.header("authentication-token", token).send(token);
           return { token, user };
         }
       }
@@ -65,11 +64,16 @@ const appRouter = trpc
     trpc
       .router<Context>()
       .middleware(async ({ ctx, next }) => {
-        // if (!ctx.user) {
-        //   throw new TRPCError({ code: "UNAUTHORIZED" });
-        // }
-        console.log("man is authenticated");
-        return next();
+        if (!ctx.userID) {
+          throw new TRPCError({ code: "UNAUTHORIZED" });
+        }
+        // TODO check if user actually exists
+        const userExists = await UserModel.findById(ctx.userID);
+        if (userExists) {
+          return next();
+        } else {
+          throw new TRPCError({ code: "UNAUTHORIZED" });
+        }
       })
       .query("secretPlace", {
         resolve() {
@@ -122,7 +126,37 @@ export type AppRouter = typeof appRouter;
 const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({}); // no context
+}: trpcExpress.CreateExpressContextOptions) => {
+  // Create your context based on the request object
+  // Will be available as `ctx` in all your resolvers
+  // This is just an example of something you'd might want to do in your ctx fn
+  try {
+    // Get the token
+    console.log("auth headers", req.headers.authorization);
+    const notAuthenticated = {
+      req,
+      res,
+      userID: null,
+    };
+    if (!req.headers.authorization) {
+      return notAuthenticated;
+    } else {
+      // Validate Access Token
+      const accessToken = req.headers.authorization;
+      // const userID = jwt.verify(accessToken, "secretShouldBeLonger");
+      return {
+        req,
+        res,
+        userID: jwt.verify(accessToken, "secretShouldBeLonger"),
+      };
+    }
+  } catch (err: any) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: err.message,
+    });
+  }
+};
 
 type Context = trpc.inferAsyncReturnType<typeof createContext>;
 

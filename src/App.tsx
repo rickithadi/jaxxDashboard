@@ -13,20 +13,19 @@ import { trpc } from "./trpc";
 import { User } from "./types";
 
 export const App = () => {
-  let localUser = JSON.parse(localStorage.getItem("user") || "");
-  console.log("found user", localUser);
-  const [user, setUser] = useState(localUser);
+  let localUser = JSON.parse(localStorage.getItem("user") || "null");
+  console.log("localUser", localUser);
+  const [user, setUser] = useState(localUser || (undefined as unknown as User));
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
       url: "http://localhost:8080/trpc",
-      // optional
-      // headers() {
-      //   return {
-      //     authorization: getAuthCookie(),
-      //   };
-      // },
+      headers() {
+        return {
+          authorization: user.token,
+        };
+      },
     })
   );
   const withAuthedHeader = (component: JSX.Element) => (

@@ -43,8 +43,6 @@ export const LoginPage = () => {
     if (!password) setErrors({ ...errors, password: "Password is required" });
     console.log("submiting", email, password);
     loginMutation.mutate({ email, password });
-    // api post
-    // setErrors({ ...errors, general: "Invalid email or password" });
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 ">
