@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { authContext } from "../context";
 import { Redirect, useHistory } from "react-router-dom";
 import { trpc } from "../trpc";
+import { User } from "../types";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -19,12 +20,23 @@ export const LoginPage = () => {
   }
   // const loginMutation = trpc.useMutation("login");
   const loginMutation = trpc.useMutation("login", {
-    onSuccess: (data) => console.log(data),
+    onSuccess: (data) => {
+      console.log(data);
+      setProfile(data);
+    },
     onError: (error) => {
       console.log(error);
       setErrors({ ...errors, general: error.message });
     },
   });
+
+  const setProfile = (response: { token: string; user: User }) => {
+    let user = { ...response.user };
+    user.token = response.token;
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
+    return history.push("/dashboard");
+  };
 
   const login = () => {
     if (!email) setErrors({ ...errors, email: "Email is required" });

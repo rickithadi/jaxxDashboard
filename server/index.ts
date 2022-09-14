@@ -40,7 +40,7 @@ const appRouter = trpc
           throw new TRPCError({ code: "NOT_FOUND" });
         } else {
           const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
-          return token;
+          return { token, user };
         }
       }
     },

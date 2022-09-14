@@ -13,7 +13,9 @@ import { trpc } from "./trpc";
 import { User } from "./types";
 
 export const App = () => {
-  const [user, setUser] = useState(undefined as unknown as User);
+  let localUser = JSON.parse(localStorage.getItem("user") || "");
+  console.log("found user", localUser);
+  const [user, setUser] = useState(localUser);
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -81,7 +83,8 @@ export const PrivateRoute = ({
   ...rest
 }: Props) => {
   const { user } = useContext(authContext);
-  if (!user) return <Redirect to="/login" />;
+  if (!user || !user.token || user.token === "")
+    return <Redirect to="/login" />;
 
   return <Route {...rest} component={component} path={path} exact={exact} />;
 };
