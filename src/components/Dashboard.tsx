@@ -4,7 +4,6 @@ import { Product } from "../types";
 import "../tailwind.output.css";
 import { trpc } from "../trpc";
 export const Dashboard = () => {
-
   const products = trpc.useQuery(["products.getProducts"]);
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-max min-h-screen">
@@ -19,7 +18,8 @@ export const Dashboard = () => {
 const ProductCard = (props: { product: Product }) => {
   return (
     <div
-      className="rounded-lg shadow-lg bg-white max-w-sm w-80"
+      // className="rounded-lg shadow-lg bg-white max-w-sm w-80"
+      className="my-8 rounded shadow-lg bg-white duration-300 hover:-translate-y-1 "
       key={props.product._id}
     >
       <img
