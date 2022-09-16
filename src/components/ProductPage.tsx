@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { trpc } from "../trpc";
 import { DeleteModal } from "./DeleteModal";
+import { convertBase64 } from "./helpers";
 
 export const ProductPage = () => {
   let { id } = useParams<{ id: string }>();
@@ -36,7 +37,6 @@ export const ProductPage = () => {
   const deleteProduct = () => {
     deleteMutation.mutate(product?._id);
   };
-
 
   const buttons = (edit: boolean) =>
     edit ? (
@@ -72,19 +72,6 @@ export const ProductPage = () => {
         </button>
       </div>
     );
-  //  TODO seperate into helper
-  const convertBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
   return (
     <>
       {error ? (

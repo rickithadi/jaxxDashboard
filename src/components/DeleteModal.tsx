@@ -1,6 +1,5 @@
 import { Product } from "../types";
 
-//TODO seperate into components
 type Props = {
   product: Product;
   deleteProduct: () => void;
