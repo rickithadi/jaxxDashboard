@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "npx nodemon ./index.ts",
-    "script": "cd scripts && ts-node"
+    "populateDB": "cd scripts && ts-node populateDB.ts"
   },
   "main": "index.ts",
   "dependencies": {
