@@ -14,6 +14,7 @@ import { Product, User } from "./types";
 
 export const App = () => {
   let localUser = JSON.parse(localStorage.getItem("user") || "null");
+  // TODO unsafe types
   const [user, setUser] = useState(localUser || (undefined as unknown as User));
   const [filteredProducts, setFilteredProducts] = useState([] as Product[]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,14 +49,12 @@ export const App = () => {
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
             <Switch>
-              {/* fallback */}
               <PrivateRoute
                 exact
                 path="/dashboard"
                 component={() => withAuthedHeader(<Dashboard />)}
               />
               <Route exact path="/login" component={() => <LoginPage />} />
-              {/* Private Routes */}
               <PrivateRoute
                 exact
                 path="/add"

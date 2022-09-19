@@ -5,10 +5,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Instructions to run locally
 
 *server*
-cd server
-1) npm i
-2) npm run populateDB
-3) npm start
+1) cd server
+2) npm i
+3) npm run populateDB
+4) npm start
 
 *client*
 1) npm i
