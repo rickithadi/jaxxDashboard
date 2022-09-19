@@ -6,5 +6,6 @@ const ProductSchema = new Mongoose.Schema({
   title: String,
   image: String,
 });
+ProductSchema.index({ title: "text" });
 
 export default ProductSchema;

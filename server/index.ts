@@ -78,6 +78,7 @@ const appRouter = trpc
       .query("search", {
         input: z.string(),
         async resolve({ input }) {
+          console.log("searching for", input);
           return await ProductModel.find(
             { $text: { $search: input } },
             { score: { $meta: "textScore" } }

@@ -5,6 +5,7 @@ import { trpc } from "../trpc";
 export const SearchBar = () => {
   const [searchText, setsearchText] = useState("");
 
+  // TODO use somekind of debouce
   const { data: products, refetch } = trpc.useQuery(
     ["products.search", searchText],
     { onSuccess: (data) => console.log(data) }
@@ -12,7 +13,7 @@ export const SearchBar = () => {
 
   useEffect(() => {
     refetch();
-  }, [products, refetch]);
+  }, [searchText, refetch]);
   return (
     <input
       type="text"
