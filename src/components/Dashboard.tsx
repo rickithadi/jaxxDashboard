@@ -1,16 +1,57 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
 
 import { Product } from "../types";
 import "../tailwind.output.css";
 import { trpc } from "../trpc";
+import { filterContext } from "../context";
+
 export const Dashboard = () => {
   const products = trpc.useQuery(["products.getProducts"]);
+  const { filteredProducts, setFilteredProducts } = useContext(filterContext);
+
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-max min-h-screen">
+      {filteredProducts.length > 0 && (
+        <h1 className="text-5xl font-bold mt-0 mb-6 text-center text-white">
+          Found {filteredProducts.length}
+          <button
+            type="submit"
+            className="
+text-center
+      px-6
+      py-2.5
+      bg-blue-600
+      text-white
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      rounded
+      shadow-md
+      hover:bg-blue-700 hover:shadow-lg
+      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+      active:bg-blue-800 active:shadow-lg
+      transition
+      duration-150
+      disabled:opacity-25
+      ease-in-out"
+            onClick={(e) => setFilteredProducts([])}
+          >
+            reset search
+          </button>
+        </h1>
+      )}
       <div className="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {products?.data?.reverse().map((product: Product) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
+        {filteredProducts.length > 0
+          ? filteredProducts?.map((product: Product) => (
+              <ProductCard product={product} key={product._id} />
+            ))
+          : products?.data
+              ?.reverse()
+              .map((product: Product) => (
+                <ProductCard product={product} key={product._id} />
+              ))}
       </div>
     </section>
   );
@@ -18,12 +59,11 @@ export const Dashboard = () => {
 const ProductCard = (props: { product: Product }) => {
   return (
     <div
-      // className="rounded-lg shadow-lg bg-white max-w-sm w-80"
       className="my-8 rounded shadow-lg bg-white duration-300 hover:-translate-y-1 "
       key={props.product._id}
     >
       <img
-        className="rounded-t-lg h-80 w-80"
+        className="rounded-t-lg h-80 w-full"
         src={props.product.image}
         alt={props.product.title}
       />

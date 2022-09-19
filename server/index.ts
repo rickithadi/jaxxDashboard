@@ -38,7 +38,7 @@ const appRouter = trpc
         } else {
           const token = jwt.sign({ _id: user._id }, "secretShouldBeLonger");
           //TODO not working, need to set context on succesful login
-         return { token, user };
+          return { token, user };
         }
       }
     },
@@ -75,9 +75,17 @@ const appRouter = trpc
           throw new TRPCError({ code: "UNAUTHORIZED" });
         }
       })
-      .query("secretPlace", {
-        resolve() {
-          return "a key";
+      .query("search", {
+        input: z.string(),
+        async resolve({ input }) {
+          return await ProductModel.find(
+            {
+              $text: {
+                $search: input,
+              },
+            },
+            { score: { $meta: "textScore" } }
+          ).sort({ score: { $meta: "textScore" } });
         },
       })
       .query("getProducts", {
@@ -178,3 +186,7 @@ app.listen(port, () => {
   console.log(`api-server listening at http://localhost:${port}`);
   connectDB();
 });
+
+const escapeRegex = (text: string) => {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};

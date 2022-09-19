@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { SearchBar } from "./SearchBar";
 
 export const AuthedHeader = () => {
   const currentRoute = useLocation().pathname;
@@ -34,11 +35,12 @@ export const AuthedHeader = () => {
               </svg>
             </Link>
           ) : (
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full text-lg px-4 py-4 rounded-md rounded-r-none outline-none"
-            />
+            // <input
+            //   type="text"
+            //   placeholder="Search"
+            //   className="w-full text-lg px-4 py-4 rounded-md rounded-r-none outline-none"
+            // />
+            <SearchBar />
           )}
         </div>
       </li>
@@ -61,9 +63,9 @@ export const AuthedHeader = () => {
               stroke="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
@@ -79,11 +81,11 @@ export const AuthedHeader = () => {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="2"
+          strokeWidth="2"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           {" "}
           <path stroke="none" d="M0 0h24v24H0z" />{" "}

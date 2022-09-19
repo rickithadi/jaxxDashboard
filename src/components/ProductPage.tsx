@@ -77,7 +77,7 @@ export const ProductPage = () => {
       {error ? (
         <Redirect to="/dashboard" />
       ) : (
-        <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900  px-0 ">
+        <div className="flex  items-center justify-center h-max bg-gray-100 dark:bg-gray-900  px-0 ">
           {product && (
             <div
               className="rounded-lg shadow-lg bg-white w-80"
@@ -91,7 +91,7 @@ export const ProductPage = () => {
                 />
               )}
               <img
-                className="rounded-t-lg h-80 w-80"
+                className="rounded-t-lg h-80 w-full"
                 src={
                   editProductInput?.image
                     ? editProductInput?.image

@@ -5,11 +5,12 @@ import { UserModel } from "./user/user.model";
 export const connectDB = async () => {
   try {
     await mongoose.connect("mongodb://localhost:27017");
-    console.log("🚀 Database connected...");
+    await mongoose.set("autoIndex", true);
   } catch (error: any) {
     console.log(error);
     process.exit(1);
   }
+  console.log("🚀 Database connected...");
 };
 
 export const disconnect = () => {
