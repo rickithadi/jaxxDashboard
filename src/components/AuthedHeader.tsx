@@ -2,13 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 
 export const AuthedHeader = () => {
   const currentRoute = useLocation().pathname;
-  const createProduct = () => {
-    console.log("create product");
-    //fill up form
-    //post request to backend
-    //update local state
+  const logout = () => {
+    localStorage.removeItem("user");
+    window.location.reload();
   };
-
   return (
     <nav className="navbar navbar-expand-lg shadow-md py-2 bg-white relative flex items-center w-full justify-between">
       <li className="nav-item">
@@ -57,10 +54,43 @@ export const AuthedHeader = () => {
             type="button"
             className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
           >
-            Add
+            <svg
+              className="h-8 w-8 text-white-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
           </Link>
         </div>
       )}
+      <button
+        className="top-0 mt-4 mr-4 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
+        onClick={() => logout()}
+      >
+        <svg
+          className="h-8 w-8 text-grey-500"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          {" "}
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />{" "}
+          <path d="M7 12h14l-3 -3m0 6l3 -3" />
+        </svg>
+      </button>
     </nav>
   );
 };

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { ProductModel } from "./products/products.model";
+import { UserModel } from "./user/user.model";
 
 export const connectDB = async () => {
   try {
@@ -12,4 +14,14 @@ export const connectDB = async () => {
 
 export const disconnect = () => {
   mongoose.disconnect();
+};
+export const dropCollections = async () => {
+  try {
+    console.log("🚀 Dropping collections...");
+    UserModel.collection.drop();
+    ProductModel.collection.drop();
+  } catch (e) {
+    console.log(e);
+    process.exit(1);
+  }
 };

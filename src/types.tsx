@@ -1,8 +1,9 @@
+import { Types } from "mongoose";
+
 export type User = {
   email: string;
-  name: string;
-  image: string;
-  hash: string;
+  _id: Types.ObjectId;
+  token: string;
 };
 export type Product = {
   _id: string; //this is SKU as well

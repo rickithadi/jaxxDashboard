@@ -1,6 +1,9 @@
 import { useContext, useState } from "react";
+import { Redirect, useHistory } from "react-router-dom";
+
 import { authContext } from "../context";
-import { Redirect } from "react-router-dom";
+import { trpc } from "../trpc";
+import { User } from "../types";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,17 +14,37 @@ export const LoginPage = () => {
   });
   const [password, setPassword] = useState("");
   //TODO ugly
-  const user = useContext(authContext);
+  let history = useHistory();
+  const { user, setUser } = useContext(authContext);
   if (user) {
     return <Redirect to="/dashboard" />;
   }
 
+  const loginMutation = trpc.useMutation("login", {
+    onSuccess: (data) => {
+      //TODO figure out why headers are not set immediately, forcing refresh as workaround
+      window.location.reload();
+      setProfile(data);
+    },
+    onError: (error) => {
+      console.log(error);
+      setErrors({ ...errors, general: error.message });
+    },
+  });
+
+  const setProfile = (response: { token: string; user: User }) => {
+    let user = { ...response.user };
+    user.token = response.token;
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+    return history.push("/dashboard");
+  };
+
   const login = () => {
     if (!email) setErrors({ ...errors, email: "Email is required" });
     if (!password) setErrors({ ...errors, password: "Password is required" });
-    console.log(email, password);
-    // api post
-    // setErrors({ ...errors, general: "Invalid email or password" });
+    console.log("submiting", email, password);
+    loginMutation.mutate({ email, password });
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 ">

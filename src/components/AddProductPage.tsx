@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import { trpc } from "../trpc";
+import { convertBase64 } from "./helpers";
 
 export const AddProductPage = () => {
   let history = useHistory();
@@ -13,25 +14,13 @@ export const AddProductPage = () => {
     general: "",
   });
 
-  const createMutation = trpc.useMutation("addProduct", {
+  const createMutation = trpc.useMutation("products.addProduct", {
     onSuccess: () => history.push("/dashboard"),
     onError: (error) => setErrors({ ...errors, general: error.message }),
   });
 
   const createProduct = () => {
     createMutation.mutate({ title, image });
-  };
-  const convertBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 ">
