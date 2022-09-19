@@ -79,19 +79,14 @@ const appRouter = trpc
         input: z.string(),
         async resolve({ input }) {
           console.log("searching for", input);
-          const regex = new RegExp(escapeRegex(input), "gi");
-          console.log("regex", regex);
-          return await ProductModel.find({ name: regex });
-          //   return await ProductModel.find(
-          //     {
-          //       $text: { $search: input },
-          //       $wildcard: true,
-          //       $fuzzy: {
-          //         $maxEdits: 2,
-          //       },
-          //     },
-          //     { score: { $meta: "textScore" } }
-          //   ).sort({ score: { $meta: "textScore" } });
+          return await ProductModel.find(
+            {
+              $text: {
+                $search: input,
+              },
+            },
+            { score: { $meta: "textScore" } }
+          ).sort({ score: { $meta: "textScore" } });
         },
       })
       .query("getProducts", {
