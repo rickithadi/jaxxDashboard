@@ -11,6 +11,7 @@ import { AuthedHeader } from "./components/AuthedHeader";
 import { AddProductPage } from "./components/AddProductPage";
 import { trpc } from "./trpc";
 import { Product, User } from "./types";
+import { JsxElement } from "typescript";
 
 export const App = () => {
   let localUser = JSON.parse(localStorage.getItem("user") || "null");
@@ -19,17 +20,6 @@ export const App = () => {
   const [filteredProducts, setFilteredProducts] = useState([] as Product[]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      url: "http://localhost:8080/trpc",
-      headers() {
-        return {
-          authorization: user?.token,
-        };
-      },
-    })
-  );
   const withAuthedHeader = (component: JSX.Element) => (
     <>
       <AuthedHeader />
@@ -46,38 +36,54 @@ export const App = () => {
           setIsLoading,
         }}
       >
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <Switch>
-              <PrivateRoute
-                exact
-                path="/dashboard"
-                component={() => withAuthedHeader(<Dashboard />)}
-              />
-              <Route exact path="/login" component={() => <LoginPage />} />
-              <PrivateRoute
-                exact
-                path="/add"
-                component={() => withAuthedHeader(<AddProductPage />)}
-              />
+        <TRPCWrapper>
+          <Switch>
+            <Route exact path="/login" component={() => <LoginPage />} />
+            <PrivateRoute
+              exact
+              path="/dashboard"
+              component={() => withAuthedHeader(<Dashboard />)}
+            />
+            <PrivateRoute
+              exact
+              path="/add"
+              component={() => withAuthedHeader(<AddProductPage />)}
+            />
 
-              <PrivateRoute
-                exact
-                path="/item/:id"
-                component={() => withAuthedHeader(<ProductPage />)}
-              />
-              <PrivateRoute
-                path="/*"
-                component={() => <Redirect to="/dashboard" />}
-              />
-            </Switch>
-          </QueryClientProvider>
-        </trpc.Provider>
+            <PrivateRoute
+              exact
+              path="/item/:id"
+              component={() => withAuthedHeader(<ProductPage />)}
+            />
+            <PrivateRoute
+              path="/*"
+              component={() => <Redirect to="/dashboard" />}
+            />
+          </Switch>
+        </TRPCWrapper>
       </filterContext.Provider>
     </authContext.Provider>
   );
 };
-
+const TRPCWrapper = ({ children }: any) => {
+  const { user } = useContext(authContext);
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      url: "http://localhost:8080/trpc",
+      headers() {
+        return {
+          authorization: user?.token,
+        };
+      },
+    })
+  );
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </trpc.Provider>
+  );
+};
 type Props = {
   path: string | string[];
   exact?: boolean;
@@ -91,6 +97,7 @@ export const PrivateRoute = ({
   ...rest
 }: Props) => {
   const { user } = useContext(authContext);
+  console.log(user);
   if (!user || !user.token || user.token === "")
     return <Redirect to="/login" />;
 

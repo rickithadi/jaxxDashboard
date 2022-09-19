@@ -29,7 +29,7 @@ export const ProductPage = () => {
   });
   useEffect(() => {
     setEditProductInput(product);
-  }, [product, history]);
+  }, [product]);
 
   const editProduct = () => {
     editMutation.mutate({ ...editProductInput, _id: product?._id });
@@ -77,7 +77,7 @@ export const ProductPage = () => {
       {error ? (
         <Redirect to="/dashboard" />
       ) : (
-        <div className="flex  items-center justify-center h-max bg-gray-100 dark:bg-gray-900  px-0 ">
+        <div className="flex  items-center justify-center h-screen bg-gray-100 dark:bg-gray-900  px-0 ">
           {product && (
             <div
               className="rounded-lg shadow-lg bg-white w-80"
