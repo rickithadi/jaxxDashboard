@@ -1,7 +1,7 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+ 
 ## Instructions to run locally
 
 *server*
@@ -13,3 +13,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 *client*
 1) npm i
 2) npm start
+
+Login with either user created by the script
+
+  const users = [
+    {
+      email: "bob@somewhere.com",
+      password: "longPass",
+    },
+    {
+      email: "bill@somewhere.com",
+      password: "longerPass",
+    },
+  ];
