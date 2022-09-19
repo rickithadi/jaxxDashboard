@@ -91,7 +91,7 @@ export const ProductPage = () => {
                 />
               )}
               <img
-                className="rounded-t-lg h-80 w-80"
+                className="rounded-t-lg h-80 w-full"
                 src={
                   editProductInput?.image
                     ? editProductInput?.image

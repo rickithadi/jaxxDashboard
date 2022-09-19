@@ -4,18 +4,19 @@ import { Switch, Redirect, Route } from "react-router-dom";
 
 import { Dashboard } from "./components/Dashboard";
 import "./index.css";
-import { authContext } from "./context";
+import { authContext, filterContext } from "./context";
 import { ProductPage } from "./components/ProductPage";
 import { LoginPage } from "./components/LoginPage";
 import { AuthedHeader } from "./components/AuthedHeader";
 import { AddProductPage } from "./components/AddProductPage";
 import { trpc } from "./trpc";
-import { User } from "./types";
+import { Product, User } from "./types";
 
 export const App = () => {
   let localUser = JSON.parse(localStorage.getItem("user") || "null");
-  console.log("localUser", localUser);
   const [user, setUser] = useState(localUser || (undefined as unknown as User));
+  const [filteredProducts, setFilteredProducts] = useState([] as Product[]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -36,35 +37,44 @@ export const App = () => {
   );
   return (
     <authContext.Provider value={{ user, setUser }}>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <Switch>
-            {/* fallback */}
-            <PrivateRoute
-              exact
-              path="/dashboard"
-              component={() => withAuthedHeader(<Dashboard />)}
-            />
-            <Route exact path="/login" component={() => <LoginPage />} />
-            {/* Private Routes */}
-            <PrivateRoute
-              exact
-              path="/add"
-              component={() => withAuthedHeader(<AddProductPage />)}
-            />
+      <filterContext.Provider
+        value={{
+          filteredProducts,
+          setFilteredProducts,
+          isLoading,
+          setIsLoading,
+        }}
+      >
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <Switch>
+              {/* fallback */}
+              <PrivateRoute
+                exact
+                path="/dashboard"
+                component={() => withAuthedHeader(<Dashboard />)}
+              />
+              <Route exact path="/login" component={() => <LoginPage />} />
+              {/* Private Routes */}
+              <PrivateRoute
+                exact
+                path="/add"
+                component={() => withAuthedHeader(<AddProductPage />)}
+              />
 
-            <PrivateRoute
-              exact
-              path="/item/:id"
-              component={() => withAuthedHeader(<ProductPage />)}
-            />
-            <PrivateRoute
-              path="/*"
-              component={() => <Redirect to="/dashboard" />}
-            />
-          </Switch>
-        </QueryClientProvider>
-      </trpc.Provider>
+              <PrivateRoute
+                exact
+                path="/item/:id"
+                component={() => withAuthedHeader(<ProductPage />)}
+              />
+              <PrivateRoute
+                path="/*"
+                component={() => <Redirect to="/dashboard" />}
+              />
+            </Switch>
+          </QueryClientProvider>
+        </trpc.Provider>
+      </filterContext.Provider>
     </authContext.Provider>
   );
 };

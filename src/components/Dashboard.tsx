@@ -3,14 +3,23 @@ import { Link } from "react-router-dom";
 import { Product } from "../types";
 import "../tailwind.output.css";
 import { trpc } from "../trpc";
+import { filterContext } from "../context";
+import { useContext } from "react";
 export const Dashboard = () => {
   const products = trpc.useQuery(["products.getProducts"]);
+  const { filteredProducts } = useContext(filterContext);
   return (
     <section className="bg-gray-100 dark:bg-gray-900 py-10 px-12 h-max min-h-screen">
       <div className="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {products?.data?.reverse().map((product: Product) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
+        {filteredProducts.length > 0
+          ? filteredProducts?.map((product: Product) => (
+              <ProductCard product={product} key={product._id} />
+            ))
+          : products?.data
+              ?.reverse()
+              .map((product: Product) => (
+                <ProductCard product={product} key={product._id} />
+              ))}
       </div>
     </section>
   );
@@ -18,12 +27,11 @@ export const Dashboard = () => {
 const ProductCard = (props: { product: Product }) => {
   return (
     <div
-      // className="rounded-lg shadow-lg bg-white max-w-sm w-80"
       className="my-8 rounded shadow-lg bg-white duration-300 hover:-translate-y-1 "
       key={props.product._id}
     >
       <img
-        className="rounded-t-lg h-80 w-80"
+        className="rounded-t-lg h-80 w-full"
         src={props.product.image}
         alt={props.product.title}
       />
