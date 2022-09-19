@@ -14,7 +14,6 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.8",
-    "concurrently": "^7.4.0",
     "history": "^4.10.1",
     "postcss-cli": "^10.0.0",
     "react": "^18.2.0",
@@ -55,6 +54,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.3.3",
-    "@types/server": "^1.0.5"
+    "@types/server": "^1.0.5",
+    "concurrently": "^7.4.0"
   }
 }
