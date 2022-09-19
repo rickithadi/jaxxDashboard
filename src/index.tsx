@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  //NOTE router v5 doesnt work with react 18, thought i was going crazy https://github.com/remix-run/react-router/issues/7870
+  //NOTE thought i was going crazy https://github.com/remix-run/react-router/issues/7870
   // <React.StrictMode>
   <Router>
     <App />

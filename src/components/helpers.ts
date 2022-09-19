@@ -14,7 +14,7 @@ export const convertBase64 = (file: File) => {
 };
 
 // Hook
-// T is a generic type for value parameter, our case this will be string
+// T is a generic type for value parameter, in our case this will be string
 export const useDebounce = <T>(value: T, delay: number): T => {
   // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = useState<T>(value);

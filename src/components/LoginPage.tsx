@@ -13,7 +13,7 @@ export const LoginPage = () => {
     general: "",
   });
   const [password, setPassword] = useState("");
-  //TODO ugly
+
   let history = useHistory();
   const { user, setUser } = useContext(authContext);
   if (user) {
