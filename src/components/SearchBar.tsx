@@ -8,10 +8,9 @@ import { useDebounce } from "./helpers";
 export const SearchBar = () => {
   const [searchText, setsearchText] = useState("");
   const { setFilteredProducts } = useContext(filterContext);
-  const debouncedSearchTerm: string = useDebounce<string>(searchText, 500);
+  const debouncedSearchTerm: string = useDebounce<string>(searchText, 1000);
 
-  // TODO use somekind of debouce
-  const { data } = trpc.useQuery(["products.search", debouncedSearchTerm], {
+  trpc.useQuery(["products.search", debouncedSearchTerm], {
     onSuccess: (data) => {
       setFilteredProducts(data);
     },

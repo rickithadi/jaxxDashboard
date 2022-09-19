@@ -18,7 +18,7 @@ export const convertBase64 = (file: File) => {
 export const useDebounce = <T>(value: T, delay: number): T => {
   // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
+  console.log("debouncedValue", debouncedValue);
   useEffect(
     () => {
       // Update debounced value after delay
