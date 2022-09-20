@@ -1,7 +1,6 @@
-
 export type User = {
   email: string;
-  _id: Types.ObjectId;
+  _id: string;
   token: string;
 };
 export type Product = {
